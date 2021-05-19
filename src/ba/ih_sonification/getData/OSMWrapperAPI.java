@@ -1,7 +1,7 @@
 package ba.ih_sonification.getData;
 
 /**
- * (c) Jens K�bler
+ * 
  * This software is public domain
  * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
@@ -115,19 +115,18 @@ public class OSMWrapperAPI {
 	@SuppressWarnings("nls")
 	public static HashMap<String, OSMWay> getMultipolygons(Document xmlDocument) {
 		
-		// Erstelle leere Liste von OSMWays
+		// create a List on OSMWays
 		HashMap<String, OSMWay> osmWays = new HashMap<String, OSMWay>();
 
 		// Document xml = getXML(8.32, 49.001);
 		Node osmRoot = xmlDocument.getFirstChild();
-		// Zugriff auf alle Nodes mit einem "Tab" oder einer "Einr�ckung"
+		
 		NodeList osmXMLNodes = osmRoot.getChildNodes();
 		
-		// Checke, ob jedes Element ...
+		// Check, objects  Element ...
 		for (int i = 1; i < osmXMLNodes.getLength(); i++) {
 			
 			Node item = osmXMLNodes.item(i);
-			// ... eine Way ist
 			if (item.getNodeName().equals("way")) {
 				
 				boolean hasBuildingTag = false;
@@ -147,7 +146,7 @@ public class OSMWrapperAPI {
 							tags.put(ndOrTagAttributes.getNamedItem("k").getNodeValue(), ndOrTagAttributes.getNamedItem("v")
 								.getNodeValue());
 							
-							// Checke, ob es sich um eine Way handelt, die was mit buildings zu tun hat.
+							// Check,the attribute for building
 							if (ndOrTagAttributes.getNamedItem("k").getNodeValue().startsWith("building")) {
 								hasBuildingTag = true;
 							}
@@ -159,7 +158,7 @@ public class OSMWrapperAPI {
 					}
 				}
 				
-				NamedNodeMap attributes = item.getAttributes(); // Attribute rechts von way
+				NamedNodeMap attributes = item.getAttributes(); // Attribute get on way
 				Node namedItemID = attributes.getNamedItem("id");
 				Node namedItemVersion = attributes.getNamedItem("version");
 
@@ -186,22 +185,21 @@ public class OSMWrapperAPI {
 	@SuppressWarnings("nls")
 	public static HashMap<String, OSMNode> getNodes(Document xmlDocument) {
 		
-		// Erstelle leere Liste von OSMNodes
+		// createa List on OSMNodes
 		HashMap<String, OSMNode> osmNodes = new HashMap<String, OSMNode>();
 
-		// Document xml = getXML(8.32, 49.001);
+
 		Node osmRoot = xmlDocument.getFirstChild();
-		// Zugriff auf alle Nodes mit einem "Tab" oder einer "Einrückung"
 		NodeList osmXMLNodes = osmRoot.getChildNodes();
 		
-		// Checke, ob jedes Element ...
+		// Check, objects Element ...
 		for (int i = 1; i < osmXMLNodes.getLength(); i++) {
 			
 			Node item = osmXMLNodes.item(i);
-			// ... eine Node ist
+			// ...  Node list
 			if (item.getNodeName().equals("node")) {
 				
-				// Tags speichern == Inhalt der ChildNodes speichern
+				
 				NodeList tagXMLNodes = item.getChildNodes();
 				Map<String, String> tags = new HashMap<String, String>();
 				for (int j = 1; j < tagXMLNodes.getLength(); j++) {
@@ -214,13 +212,13 @@ public class OSMWrapperAPI {
 				}
 				
 				NamedNodeMap attributes = item.getAttributes();
-				// Wichtige Attribute speichern
+				// get the attributes
 				Node namedItemID = attributes.getNamedItem("id");
 				Node namedItemLat = attributes.getNamedItem("lat");
 				Node namedItemLon = attributes.getNamedItem("lon");
 				Node namedItemVersion = attributes.getNamedItem("version");
 
-				// Vorbereitung, um eine OSMNode mit den benötigten Informationen zu erstellen
+			
 				String id = namedItemID.getNodeValue();
 				String latitude = namedItemLat.getNodeValue();
 				String longitude = namedItemLon.getNodeValue();
@@ -229,7 +227,7 @@ public class OSMWrapperAPI {
 					version = namedItemVersion.getNodeValue();
 				}
 				
-				// Erstelle eine OSMNode
+				// put the attribute in OSMNode
 				osmNodes.put(id, new OSMNode(id, latitude, longitude, version, tags));
 			}
 
@@ -340,10 +338,7 @@ public class OSMWrapperAPI {
 	 */
 	public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
 		
-		//49.01105,8.4147
-		// Gebäude links vom Architekturgebäude: 49.0118, 8.41
-		// id des Gebäude-Multipolygons: 23711721
-		// linker Punkt des Gebäudes: 256759672
+		
 		double lat = 49.0118;
 		double lon = 8.41;
 		double radius = 0.0007;
@@ -360,12 +355,12 @@ public class OSMWrapperAPI {
 			
 			OSMWay currentWay = osmWaysInVicinity.get(OSMWayID);
 			
-			// Lege eine Leere Nodes-Liste an für die aktuell betrachtete Way ...
+			
 			LinkedHashMap<String, OSMNode> refNodes = new LinkedHashMap<String, OSMNode>();
 			
 			ArrayList<String> refNodesIDs = currentWay.getRefNodesIDs();
 			
-			// Für jede NodeID, suche die dazugehörige Node und füge sie in die LinkedHashMap ein
+			
 			for (String OSMNodeID: refNodesIDs) {
 				
 				OSMNode currentNode = osmNodesInVicinity.get(OSMNodeID);
